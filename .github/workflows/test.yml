@@ -1,0 +1,27 @@
+name: Run test # action tab에 표시될 이름
+
+on: # 언제 실행 될지
+  push:
+    branches: [main] # main 브랜치에 push 될 때 실행됨
+  pull_request:
+
+# 작업 정의
+jobs:
+  test:
+    runs-on: ubuntu-latest # 우분투 최신 버전 ( 가상 머신 )
+
+    steps:
+      - name: Checkout code # 우분투에 접속을 해서 최신 코드를 내려 받는 단계
+        uses: actions/checkout@v4 # 이 작업을 거쳐야지만 npm install이 가능하다
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install Dependencies # 패키지 설치 (의존성)
+        run: npm ci # npm i 보다 더 서버에서 성능이 좋다
+
+      - name: Run tests
+        run: npm test # package.json에서 test 스크립트 실행
+        # Jest 동작 구간
